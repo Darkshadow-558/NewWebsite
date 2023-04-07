@@ -1,73 +1,60 @@
-import React, { Component } from 'react'
-import Sresult from './Sresult';
+import React, { useState, useEffect } from "react";
 
-export default class Search extends Component {
-  constructor() {
-    super();
-    this.state = {
-      articles: [],
-      loading: false,
-      page: 1,
-    };
-  }
+// import axios from "axios";
 
-  async componentDidMount() {
-    let url =
-      `https://newsapi.org/v2/everything?q=techcrunch&from=2023-02-28&sortBy=publishedAt&apiKey=1ed3bcb965ee4c41b111430e84b5b370&language=en&page=1&pageSize=${this.props.pageSize}`;
-    let data = await fetch(url);
-    let parasData = await data.json();
-    this.setState({
-      articles: parasData.articles,
-      totalArticles: parasData.totalResults,
-    });
-  }
+const Search = () => {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [articles, setArticles] = useState([]);
 
-  handlePreviousClick = async () => {
-    let url = `https://newsapi.org/v2/everything?q=techcrunch&from=2023-02-28&sortBy=publishedAt&apiKey=1ed3bcb965ee4c41b111430e84b5b370&language=en&page=${
-      this.state.page - 1
-    }&pageSize=${this.props.pageSize}`;
-    let data = await fetch(url);
-    let parasData = await data.json();
-    this.setState({ articles: parasData.articles });
-    this.setState({
-      page: this.state.page - 1,
-    });
-  };
-
-  handleNextClick = async () => {
-    if (this.state.page + 1 > Math.ceil(this.state.totalResults / 20)) {
-    } else {
-      let url = `https://newsapi.org/v2/everything?q=techcrunch&from=2023-02-28&sortBy=publishedAt&apiKey=1ed3bcb965ee4c41b111430e84b5b370&language=en&page=${
-        this.state.page + 1
-      }&pageSize=${this.props.pageSize}`;
-      let data = await fetch(url);
-      let parasData = await data.json();
-      this.setState({ articles: parasData.articles });
-      this.setState({
-        page: this.state.page + 1,
-      });
-    }
-  };
-
-  render() {
-    return (
-      <div className="container text-center p-3 ">
-        <div className="container row  row-cols-auto m-4 ">
-          {this.state.articles.map((element) => {
-            return (
-              <div className="col h-25" key={element.url}>
-                <Sresult
-                  title={element.title ? element.title.slice(0, 50) : " "}
-                  description={
-                    element.description ? element.description.slice(0, 95) : " "
-                  }
-                  newsUrl={element.url ? element.url : " "}
-                />
-              </div>
-            );
-          })}
-        </div>
-      </div>
+  const handleSearch = async (searchTerm) => {
+    const response = await fetch(
+      `https://newsapi.org/v2/everything?q=${searchTerm}&sources=bbc-news&apiKey=0f644b97cbf143ccb6926d5e4d112ad4`
     );
-  }
-}
+    const data = await response.json();
+    
+    setArticles(data.articles);
+  };
+
+  useEffect(() => {
+    handleSearch(searchTerm);
+  }, [searchTerm]);
+
+  console.log(articles);
+  return (
+    <div className="container">
+      <form className="d-flex justify-content-center" role="search">
+        <input
+          className="form-control me-2 w-25 shadow-none border-0"
+          type="search"
+          aria-label="tate"
+          value={searchTerm}
+          
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+        <button className="btn btn-outline-dark" type="submit">
+          Search
+        </button>
+      </form>
+
+      <div className="row row-cols-auto">
+        {articles.map((article,index) => (
+          
+          <div className=" card_ border-0 mx-4 my-4 " key={index}>
+          <img className="header h-75 " src={article.urlToImage} alt=" "></img>
+            <div className="info">
+              <p className="title">{article.title.slice(0,60)}</p>
+              <p>{article.description.slice(0,60)}....</p>
+            </div>
+            <div className="footer d-flex justify-content-center ">
+              <a type="button" className="action text-decoration-none" href={article.url} >
+                Get started
+              </a>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default Search;

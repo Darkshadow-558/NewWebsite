@@ -10,7 +10,7 @@ const Navbar = () => {
   };
   const homelinkStyles = ({ isActive }) => {
     return {
-      color: isActive ? "#FFFFFF" : "#8C8989",
+      color: isActive ? "#020202" : "#8C8989",
       fontSize : isActive ? "30px" : "23px",
 
     };
@@ -29,13 +29,13 @@ const Navbar = () => {
               Home
             </NavLink>
             
-            {/* <NavLink
+            <NavLink
               className="navbar-brand   mx-3"
               style={navlinkStyles}
               to="/search"
             >
               Search
-            </NavLink> */}
+            </NavLink>
             
             <NavLink
               className="navbar-brand   mx-3"
@@ -62,7 +62,7 @@ const Navbar = () => {
             <NavLink
               className="navbar-brand  mx-3"
               style={navlinkStyles}
-              to="/travelling"
+              to="/nature"
             >
               Nature
             </NavLink>

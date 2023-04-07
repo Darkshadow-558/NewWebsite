@@ -1,114 +1,43 @@
-import React, { Component } from 'react';
-import Boxes from './Menu/Boxes';
+import React, { useState, useEffect } from "react";
+import "../components/Menu/boxes.css";
 
-export default class Business extends Component {
-  constructor() {
-    super();
-    this.state = {
-      articles: [],
-      loading: false,
-      page: 1,
+
+const Business = () => {
+
+  const [articles, setArticles] = useState([]);
+
+  useEffect(() => {
+    const fetchArticles = async () => {
+      const response = await fetch(
+        "https://newsapi.org/v2/everything?q=business&apiKey=0f644b97cbf143ccb6926d5e4d112ad4&page=1&pagesize=20&language=en"
+      );
+      const data = await response.json();
+      setArticles(data.articles);
     };
-  }
+    fetchArticles();
+  }, []);
 
-  async componentDidMount() {
-    let url =
-      `https://newsapi.org/v2/everything?q=business&from=2023-02-28&sortBy=publishedAt&apiKey=1ed3bcb965ee4c41b111430e84b5b370&language=en&page=1&pageSize=${this.props.pageSize}`;
-    let data = await fetch(url);
-    let parasData = await data.json();
-    this.setState({
-      articles: parasData.articles,
-      totalArticles: parasData.totalResults,
-    });
-  }
 
-  handlePreviousClick = async () => {
-    let url = `https://newsapi.org/v2/everything?q=business&from=2023-02-28&sortBy=publishedAt&apiKey=1ed3bcb965ee4c41b111430e84b5b370&language=en&page=${
-      this.state.page - 1
-    }&pageSize=${this.props.pageSize}`;
-    let data = await fetch(url);
-    let parasData = await data.json();
-    this.setState({ articles: parasData.articles });
-    this.setState({
-      page: this.state.page - 1,
-    });
-  };
-
-  handleNextClick = async () => {
-    if (this.state.page + 1 > Math.ceil(this.state.totalResults / 20)) {
-    } else {
-      let url = `https://newsapi.org/v2/everything?q=business&from=2023-02-28&sortBy=publishedAt&apiKey=1ed3bcb965ee4c41b111430e84b5b370&language=en&page=${
-        this.state.page + 1
-      }&pageSize=${this.props.pageSize}`;
-      let data = await fetch(url);
-      let parasData = await data.json();
-      this.setState({ articles: parasData.articles });
-      this.setState({
-        page: this.state.page + 1,
-      });
-    }
-  };
-
-  render() {
-    return (
-      <div className="container text-center p-3 ">
-        <div className="container text-center d-flex justify-content-center ">
-          <button
-            disabled={this.state.page <= 1}
-            type="button"
-            className="btn btn-dark mx-3 btn-sm"
-            onClick={this.handlePreviousClick}
-          >
-            &larr; Previous
-          </button>
-          <button
-            disabled={
-              this.state.page + 1 > Math.ceil(this.state.totalResults / 20)
-            }
-            type="button"
-            className="btn btn-dark mx-3 btn-sm"
-            onClick={this.handleNextClick}
-          >
-            Next &rarr;
-          </button>
-        </div>
-        <div className="container row  row-cols-auto m-4 ">
-          {this.state.articles.map((element) => {
-            return (
-              <div className="col h-25" key={element.url}>
-                <Boxes
-                  title={element.title ? element.title.slice(0, 50) : " "}
-                  description={
-                    element.description ? element.description.slice(0, 95) : " "
-                  }
-                  imageUrl={element.urlToImage ? element.urlToImage : " "}
-                  newsUrl={element.url ? element.url : " "}
-                />
-              </div>
-            );
-          })}
-        </div>
-        <div className="container text-center d-flex justify-content-center ">
-          <button
-            disabled={this.state.page <= 1}
-            type="button"
-            className="btn btn-dark mx-3 btn-sm"
-            onClick={this.handlePreviousClick}
-          >
-            &larr; Previous
-          </button>
-          <button
-            disabled={
-              this.state.page + 1 > Math.ceil(this.state.totalResults / 20)
-            }
-            type="button"
-            className="btn btn-dark mx-3 btn-sm"
-            onClick={this.handleNextClick}
-          >
-            Next &rarr;
-          </button>
-        </div>
+  return (
+    <div className="container">
+     <div className=" row row-cols-auto  my-3">
+      {articles.map((article, index) => (
+          <div className=" card_ border-0 mx-4 my-4 " key={index}>
+          <img className="header h-50" src={article.urlToImage} alt=" "></img>
+            <div className="info">
+              <p className="title">{article.title.slice(0,60)}</p>
+              <p>{article.description.slice(0,60)}....</p>
+            </div>
+            <div className="footer d-flex justify-content-center ">
+              <a type="button" className="action text-decoration-none" href={article.url} >
+                Get started
+              </a>
+            </div>
+          </div>
+      ))}
       </div>
-    );
-  }
+    </div>
+  );
 }
+
+export default Business

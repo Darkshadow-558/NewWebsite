@@ -1,17 +1,15 @@
-.home_bg-img{
-    background: url("../resources/home_img.jpg"),rgba(0, 0, 0, 0.588);
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-size: cover;
-    height: 100vh;
-    width: 100vw;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    z-index: -1;
-}
-
-.postion-top-bottom{
-    top: 45%;
-    left:0%;
+.bg {
+  background-image: linear-gradient(
+    to left top,
+    #e7e5d5,
+    #e6e3cd,
+    #e5e1c5,
+    #e4dfbc,
+    #e3ddb4
+  );
+  background-repeat: no-repeat;
+  height: 100vh;
+  width: 100%;
+  background-size: cover;
+  background-position: center;
 }

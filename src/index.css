@@ -7,7 +7,9 @@
     
 }
 body{
-    background-color: #dcf8fd;
+    background-image: linear-gradient(to left top, #e7e5d5, #e6e3cd, #e5e1c5, #e4dfbc, #e3ddb4);
+    background-repeat: no-repeat;
 }
+
 
 
